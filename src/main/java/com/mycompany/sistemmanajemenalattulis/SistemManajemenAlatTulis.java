@@ -22,7 +22,8 @@ public class SistemManajemenAlatTulis {
             System.out.println("1. Tambah Data Baru");
             System.out.println("2. Tampilkan Seluruh Data");
             System.out.println("3. Pencarian / Aksi Khusus");
-            System.out.println("4. Keluar");
+            System.out.println("4. Proses Alat Tulis");
+            System.out.println("5. Keluar");
             System.out.print("Pilih menu: ");
 
             int pilihan = scanner.nextInt();
@@ -43,6 +44,10 @@ public class SistemManajemenAlatTulis {
                     break;
 
                 case 4:
+                    prosesData();
+                    break;
+
+                case 5:
                     isRunning = false;
                     System.out.println();
                     System.out.println("Terima kasih telah menggunakan program.");
@@ -65,6 +70,7 @@ public class SistemManajemenAlatTulis {
 
             System.out.println("1. Alat Tulis Sekolah");
             System.out.println("2. Alat Tulis Kantor");
+            System.out.println("3. Alat Tulis Gambar");
             System.out.print("Pilih jenis: ");
 
             int jenis = scanner.nextInt();
@@ -112,6 +118,23 @@ public class SistemManajemenAlatTulis {
                         new AlatTulisKantor(
                                 kode, nama, harga, stok,
                                 bahan, ukuran);
+
+                jumlahAlatTulis++;
+
+                System.out.println("Data berhasil ditambahkan.");
+
+            } else if (jenis == 3) {
+
+                System.out.print("Jenis alat gambar: ");
+                String jenisGambar = scanner.nextLine();
+
+                System.out.print("Warna: ");
+                String warna = scanner.nextLine();
+
+                daftarAlatTulis[jumlahAlatTulis] =
+                        new AlatTulisGambar(
+                                kode, nama, harga, stok,
+                                jenisGambar, warna);
 
                 jumlahAlatTulis++;
 
@@ -226,6 +249,35 @@ public class SistemManajemenAlatTulis {
         if (!ditemukan) {
 
             System.out.println("Data tidak ditemukan.");
+        }
+    }
+
+    public static void prosesAlatTulis(AlatTulis alat) {
+
+        System.out.println();
+        System.out.println("=== PROSES ALAT TULIS ===");
+
+        alat.tampilkanInfo();
+    }
+
+    public static void prosesData() {
+
+        if (jumlahAlatTulis == 0) {
+
+            System.out.println("Belum ada data alat tulis.");
+
+        } else {
+
+            System.out.println();
+            System.out.println("=== PROSES DATA ALAT TULIS ===");
+
+            for (int i = 0; i < jumlahAlatTulis; i++) {
+
+                System.out.println();
+                System.out.println("Data ke-" + (i + 1));
+
+                prosesAlatTulis(daftarAlatTulis[i]);
+            }
         }
     }
 }
