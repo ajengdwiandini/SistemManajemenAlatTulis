@@ -11,6 +11,8 @@ public class SistemManajemenAlatTulis {
 
     public static void main(String[] args) {
 
+        isiDataAwal();
+
         System.out.println("==============================================");
         System.out.println("       SISTEM MANAJEMEN ALAT TULIS");
         System.out.println("==============================================");
@@ -59,6 +61,39 @@ public class SistemManajemenAlatTulis {
         }
 
         scanner.close();
+    }
+
+    public static void isiDataAwal() {
+
+        daftarAlatTulis[jumlahAlatTulis] =
+                new AlatTulisSekolah(
+                        "S001", "Pulpen", 5000, 20,
+                        "Pulpen Gel", "Snowman");
+        jumlahAlatTulis++;
+
+        daftarAlatTulis[jumlahAlatTulis] =
+                new AlatTulisSekolah(
+                        "S002", "Pensil", 3000, 15,
+                        "Pensil 2B", "Faber-Castell");
+        jumlahAlatTulis++;
+
+        daftarAlatTulis[jumlahAlatTulis] =
+                new AlatTulisKantor(
+                        "K001", "Map", 4000, 10,
+                        "Plastik", "F4");
+        jumlahAlatTulis++;
+
+        daftarAlatTulis[jumlahAlatTulis] =
+                new AlatTulisKantor(
+                        "K002", "Stapler", 15000, 8,
+                        "Plastik dan Besi", "Sedang");
+        jumlahAlatTulis++;
+
+        daftarAlatTulis[jumlahAlatTulis] =
+                new AlatTulisGambar(
+                        "G001", "Pensil Warna", 12000, 15,
+                        "Pensil Warna", "Merah");
+        jumlahAlatTulis++;
     }
 
     public static void tambahData() {
