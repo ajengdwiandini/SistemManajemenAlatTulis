@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.sistemmanajemenalattulis;
 
-public class AlatTulisGambar extends AlatTulis {
+public class AlatTulisGambar extends AlatTulis
+        implements DapatDinilai {
 
     private String jenis;
     private String warna;
@@ -31,6 +28,22 @@ public class AlatTulisGambar extends AlatTulis {
 
     public void setWarna(String warna) {
         this.warna = warna;
+    }
+
+    @Override
+    public double hitungNilaiStok() {
+        return getHarga() * getStok();
+    }
+
+    @Override
+    public void beriRating(int bintang) {
+
+        if (bintang >= 1 && bintang <= 5) {
+            System.out.println("Rating alat tulis gambar: "
+                    + bintang + "/5");
+        } else {
+            System.out.println("Rating harus antara 1 sampai 5.");
+        }
     }
 
     @Override
