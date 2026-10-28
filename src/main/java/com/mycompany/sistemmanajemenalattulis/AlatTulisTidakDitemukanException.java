@@ -1,4 +1,3 @@
-
 package com.mycompany.sistemmanajemenalattulis;
 
 public class AlatTulisTidakDitemukanException extends Exception {
@@ -7,4 +6,3 @@ public class AlatTulisTidakDitemukanException extends Exception {
         super(pesan);
     }
 }
-
