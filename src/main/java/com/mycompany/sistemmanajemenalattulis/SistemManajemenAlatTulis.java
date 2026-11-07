@@ -1,8 +1,6 @@
 
 package com.mycompany.sistemmanajemenalattulis;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
@@ -10,38 +8,41 @@ public class SistemManajemenAlatTulis {
 
     private static final Scanner input = new Scanner(System.in);
 
-    private static final ArrayList<AlatTulis> daftarAlatTulis =
-        new ArrayList<>();
-    private static final HashMap<String, String> dataAnggota =
-        new HashMap<>();
+    private static final TokoAlatTulis toko = new TokoAlatTulis();
 
-static {
-    daftarAlatTulis.add(
-        new AlatTulisSekolah("S001", "Pensil", 3000, "SD")
-    );
-    daftarAlatTulis.add(
-        new AlatTulisSekolah("S002", "Buku Tulis", 5000, "SMP")
-    );
-    daftarAlatTulis.add(
-        new AlatTulisKantor("K001", "Pulpen Kantor", 4000, "Administrasi")
-    );
-    daftarAlatTulis.add(
-        new AlatTulisKantor("K002", "Map Folder", 7000, "Arsip")
-    );
-    daftarAlatTulis.add(
-        new AlatTulisGambar("G001", "Pensil Warna", 15000, "Mewarnai")
-    );
-    
-    dataAnggota.put("A001", "Andi");
-    dataAnggota.put("A002", "Siti");
-    dataAnggota.put("A003", "Budi");
-}
+    private static final TransaksiPeminjaman transaksi =
+        new TransaksiPeminjaman();
 
     public static void main(String[] args) {
-        int pilihan;
+
+        toko.tambahAlatTulis(
+            new AlatTulisSekolah("S001", "Pensil", 3000, "SD")
+        );
+
+        toko.tambahAlatTulis(
+            new AlatTulisSekolah("S002", "Buku Tulis", 5000, "SMP")
+        );
+
+        toko.tambahAlatTulis(
+            new AlatTulisKantor("K001", "Pulpen Kantor", 4000, "Administrasi")
+        );
+
+        toko.tambahAlatTulis(
+            new AlatTulisKantor("K002", "Map Folder", 7000, "Arsip")
+        );
+
+        toko.tambahAlatTulis(
+            new AlatTulisGambar("G001", "Pensil Warna", 15000, "Mewarnai")
+        );
+
+        toko.tambahAnggota(new Anggota("A001", "Andi"));
+        toko.tambahAnggota(new Anggota("A002", "Siti"));
+        toko.tambahAnggota(new Anggota("A003", "Budi"));
+
+        int pilihan = -1;
 
         do {
-            System.out.println("================================");
+            System.out.println("\n================================");
             System.out.println(" SISTEM MANAJEMEN ALAT TULIS");
             System.out.println("================================");
             System.out.println("1. Tampilkan seluruh data");
@@ -49,10 +50,11 @@ static {
             System.out.println("3. Proses interface");
             System.out.println("4. Proses polymorphism");
             System.out.println("5. Kelola data anggota");
+            System.out.println("6. Proses transaksi peminjaman");
+            System.out.println("7. Informasi ruang penyimpanan");
             System.out.println("0. Keluar");
             System.out.print("Pilih menu: ");
 
-           
             try {
                 pilihan = input.nextInt();
                 input.nextLine();
@@ -68,111 +70,66 @@ static {
 
             switch (pilihan) {
                 case 1:
-                    tampilkanSemuaData();
+                    toko.tampilkanSemuaAlatTulis();
                     break;
+
                 case 2:
                     menuPencarian();
                     break;
+
                 case 3:
                     prosesInterface();
                     break;
+
                 case 4:
                     prosesPolymorphism();
                     break;
+
                 case 5:
                     menuAnggota();
                     break;
+
+                case 6:
+                    menuTransaksi();
+                    break;
+
+                case 7:
+                    toko.tampilkanRuangPenyimpanan();
+                    break;
+
                 case 0:
                     System.out.println("Program selesai.");
                     break;
+
                 default:
                     System.out.println("Pilihan tidak tersedia.");
             }
 
-            System.out.println();
         } while (pilihan != 0);
     }
 
-   
-private static void tampilkanSemuaData() {
-    System.out.println("--- SELURUH DATA ALAT TULIS ---");
+    private static void menuPencarian() {
+        try {
+            System.out.print("Masukkan kode alat tulis: ");
+            String kode = input.nextLine();
 
-    if (daftarAlatTulis.isEmpty()) {
-        System.out.println("Belum ada data alat tulis.");
-        return;
-    }
+            AlatTulis hasil = toko.cariAlatTulis(kode);
 
-    for (int i = 0; i < daftarAlatTulis.size(); i++) {
-        AlatTulis alat = daftarAlatTulis.get(i);
-        alat.tampilkanInfo();
-        System.out.println("-------------------------------");
-    }
+            System.out.println("Data ditemukan:");
+            hasil.tampilkanInfo();
 
-    System.out.println("Jumlah data: " + daftarAlatTulis.size());
-}
+        } catch (AlatTulisTidakDitemukanException e) {
+            System.out.println("Kesalahan pencarian: " + e.getMessage());
 
-
-    // Pencarian berdasarkan kode.
-    
-private static AlatTulis cariAlatTulis(String kode)
-        throws AlatTulisTidakDitemukanException {
-
-    if (kode == null || kode.trim().isEmpty()) {
-        throw new AlatTulisTidakDitemukanException(
-            "Kode alat tulis tidak boleh kosong!"
-        );
-    }
-
-    for (AlatTulis alat : daftarAlatTulis) {
-        if (alat.getKode().equalsIgnoreCase(kode.trim())) {
-            return alat;
+        } finally {
+            System.out.println("Proses pencarian selesai.");
         }
     }
-
-    throw new AlatTulisTidakDitemukanException(
-        "Alat tulis dengan kode " + kode + " tidak ditemukan!"
-    );
-}
-
-
-    // Overloading: pencarian berdasarkan nama.
-    private static AlatTulis cariAlatTulis(
-            String nama, boolean berdasarkanNama) {
-
-        if (berdasarkanNama) {
-            for (AlatTulis alat : daftarAlatTulis) {
-                if (alat.getNama().equalsIgnoreCase(nama)) {
-                    return alat;
-                }
-            }
-        }
-        return null;
-    }
-
-    
-private static void menuPencarian() {
-    try {
-        System.out.print("Masukkan kode alat tulis: ");
-        String kode = input.nextLine();
-
-        AlatTulis hasil = cariAlatTulis(kode);
-
-        System.out.println("Data ditemukan:");
-        hasil.tampilkanInfo();
-
-    } catch (AlatTulisTidakDitemukanException e) {
-        System.out.println("Kesalahan pencarian: " + e.getMessage());
-
-    } finally {
-        System.out.println("Proses pencarian selesai.");
-    }
-}
-
 
     private static void prosesInterface() {
-        System.out.println("--- PROSES INTERFACE ---");
+        System.out.println("\n--- PROSES INTERFACE ---");
 
-        for (AlatTulis alat : daftarAlatTulis) {
+        for (AlatTulis alat : toko.getDaftarAlatTulis()) {
             alat.tampilkanInfo();
 
             if (alat instanceof DapatDipinjam) {
@@ -188,98 +145,114 @@ private static void menuPencarian() {
     }
 
     private static void prosesPolymorphism() {
-        System.out.println("--- PROSES POLYMORPHISM ---");
+        System.out.println("\n--- PROSES POLYMORPHISM ---");
 
-        for (AlatTulis alat : daftarAlatTulis) {
+        for (AlatTulis alat : toko.getDaftarAlatTulis()) {
             alat.tampilkanInfo();
+            System.out.println("-------------------------------");
         }
-    }  
-        
-private static void menuAnggota() {
-    int pilihanAnggota = -1;
+    }
 
-    do {
-        System.out.println("\n=== MENU DATA ANGGOTA ===");
-        System.out.println("1. Tambah anggota");
-        System.out.println("2. Cari anggota");
-        System.out.println("3. Tampilkan semua anggota");
-        System.out.println("0. Kembali");
-        System.out.print("Pilih menu: ");
+    private static void menuAnggota() {
+        int pilihanAnggota = -1;
 
-        try {
-            pilihanAnggota = Integer.parseInt(input.nextLine());
+        do {
+            System.out.println("\n=== MENU DATA ANGGOTA ===");
+            System.out.println("1. Tambah anggota");
+            System.out.println("2. Cari anggota");
+            System.out.println("3. Tampilkan semua anggota");
+            System.out.println("0. Kembali");
+            System.out.print("Pilih menu: ");
 
-            switch (pilihanAnggota) {
-                case 1:
-                    System.out.print("Masukkan kode anggota: ");
-                    String kode = input.nextLine().trim();
+            try {
+                pilihanAnggota = Integer.parseInt(input.nextLine());
 
-                    System.out.print("Masukkan nama anggota: ");
-                    String nama = input.nextLine().trim();
+                switch (pilihanAnggota) {
+                    case 1:
+                        System.out.print("Masukkan kode anggota: ");
+                        String kode = input.nextLine().trim();
 
-                    if (kode.isEmpty() || nama.isEmpty()) {
-                        throw new IllegalArgumentException(
-                            "Kode dan nama tidak boleh kosong!"
-                        );
-                    }
+                        System.out.print("Masukkan nama anggota: ");
+                        String nama = input.nextLine().trim();
 
-                    if (dataAnggota.containsKey(kode)) {
-                        System.out.println(
-                            "Kode anggota sudah digunakan!"
-                        );
-                    } else {
-                        dataAnggota.put(kode, nama);
-                        System.out.println(
-                            "Anggota berhasil ditambahkan."
-                        );
-                    }
-                    break;
-
-                case 2:
-                    System.out.print("Masukkan kode anggota: ");
-                    String cariKode = input.nextLine().trim();
-
-                    if (dataAnggota.containsKey(cariKode)) {
-                        System.out.println(
-                            "Nama anggota: " + dataAnggota.get(cariKode)
-                        );
-                    } else {
-                        System.out.println("Anggota tidak ditemukan.");
-                    }
-                    break;
-
-                case 3:
-                    if (dataAnggota.isEmpty()) {
-                        System.out.println("Belum ada data anggota.");
-                    } else {
-                        for (String id : dataAnggota.keySet()) {
-                            System.out.println(
-                                id + " - " + dataAnggota.get(id)
+                        if (kode.isEmpty() || nama.isEmpty()) {
+                            throw new IllegalArgumentException(
+                                "Kode dan nama tidak boleh kosong!"
                             );
                         }
-                    }
-                    break;
 
-                case 0:
-                    System.out.println("Kembali ke menu utama.");
-                    break;
+                        if (toko.cariAnggota(kode) != null) {
+                            System.out.println("Kode anggota sudah digunakan.");
+                        } else {
+                            toko.tambahAnggota(new Anggota(kode, nama));
+                        }
+                        break;
 
-                default:
-                    System.out.println("Pilihan menu tidak tersedia.");
+                    case 2:
+                        System.out.print("Masukkan kode anggota: ");
+                        String cariKode = input.nextLine().trim();
+
+                        Anggota anggota = toko.cariAnggota(cariKode);
+
+                        if (anggota != null) {
+                            System.out.println("Data anggota ditemukan:");
+                            anggota.tampilkanInformasi();
+                        } else {
+                            System.out.println("Anggota tidak ditemukan.");
+                        }
+                        break;
+
+                    case 3:
+                        toko.tampilkanSemuaAnggota();
+                        break;
+
+                    case 0:
+                        System.out.println("Kembali ke menu utama.");
+                        break;
+
+                    default:
+                        System.out.println("Pilihan menu tidak tersedia.");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Input harus berupa angka!");
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("Kesalahan: " + e.getMessage());
+
+            } finally {
+                System.out.println("Pemeriksaan menu anggota selesai.");
             }
 
-        } catch (NumberFormatException e) {
-            System.out.println("Input harus berupa angka!");
+        } while (pilihanAnggota != 0);
+    }
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Kesalahan: " + e.getMessage());
+    private static void menuTransaksi() {
+        try {
+            System.out.println("\n=== TRANSAKSI PEMINJAMAN ===");
+
+            System.out.print("Masukkan ID anggota: ");
+            String idAnggota = input.nextLine().trim();
+
+            Anggota anggota = toko.cariAnggota(idAnggota);
+
+            if (anggota == null) {
+                System.out.println("Anggota tidak ditemukan.");
+                return;
+            }
+
+            System.out.print("Masukkan kode alat tulis: ");
+            String kodeAlat = input.nextLine().trim();
+
+            AlatTulis alat = toko.cariAlatTulis(kodeAlat);
+
+            transaksi.prosesPeminjaman(anggota, alat);
+
+        } catch (AlatTulisTidakDitemukanException e) {
+            System.out.println("Transaksi gagal: " + e.getMessage());
 
         } finally {
-            System.out.println(
-                "Pemeriksaan menu anggota selesai."
-            );
+            System.out.println("Proses transaksi selesai.");
         }
-
-    } while (pilihanAnggota != 0);
-}
+    }
 }
