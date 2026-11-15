@@ -1,6 +1,9 @@
 
 package com.mycompany.sistemmanajemenalattulis;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class TransaksiPeminjaman {
 
     public void prosesPeminjaman(Anggota anggota, AlatTulis alat) {
@@ -22,5 +25,23 @@ public class TransaksiPeminjaman {
         System.out.println("Kode Alat    : " + alat.getKode());
         System.out.println("Nama Alat    : " + alat.getNama());
         System.out.println("Status       : Transaksi berhasil diproses.");
+
+        try {
+            FileWriter writer = new FileWriter("log_transaksi.txt", true);
+
+            writer.write("Nama Anggota : " + anggota.getNamaAnggota() + "\n");
+            writer.write("ID Anggota   : " + anggota.getIdAnggota() + "\n");
+            writer.write("Kode Alat    : " + alat.getKode() + "\n");
+            writer.write("Nama Alat    : " + alat.getNama() + "\n");
+            writer.write("Status       : Berhasil\n");
+            writer.write("-------------------------------\n");
+
+            writer.close();
+
+            System.out.println("Riwayat transaksi berhasil disimpan.");
+
+        } catch (IOException e) {
+            System.out.println("Gagal menyimpan transaksi: " + e.getMessage());
+        }
     }
 }

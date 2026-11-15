@@ -1,0 +1,6 @@
+Nama Anggota : Andi
+ID Anggota   : A001
+Kode Alat    : S001
+Nama Alat    : Pensil
+Status       : Berhasil
+-------------------------------

@@ -1,6 +1,11 @@
 package com.mycompany.sistemmanajemenalattulis;
 
-public abstract class AlatTulis {
+import java.io.Serializable;
+
+public abstract class AlatTulis implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String kode;
     private String nama;
     private double harga;

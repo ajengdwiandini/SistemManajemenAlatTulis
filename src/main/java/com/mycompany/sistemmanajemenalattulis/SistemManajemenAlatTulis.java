@@ -15,29 +15,35 @@ public class SistemManajemenAlatTulis {
 
     public static void main(String[] args) {
 
-        toko.tambahAlatTulis(
-            new AlatTulisSekolah("S001", "Pensil", 3000, "SD")
-        );
+        boolean dataTersedia = toko.muatDataDariFile();
 
-        toko.tambahAlatTulis(
-            new AlatTulisSekolah("S002", "Buku Tulis", 5000, "SMP")
-        );
+        if (!dataTersedia) {
+            toko.tambahAlatTulis(
+                new AlatTulisSekolah("S001", "Pensil", 3000, "SD")
+            );
 
-        toko.tambahAlatTulis(
-            new AlatTulisKantor("K001", "Pulpen Kantor", 4000, "Administrasi")
-        );
+            toko.tambahAlatTulis(
+                new AlatTulisSekolah("S002", "Buku Tulis", 5000, "SMP")
+            );
 
-        toko.tambahAlatTulis(
-            new AlatTulisKantor("K002", "Map Folder", 7000, "Arsip")
-        );
+            toko.tambahAlatTulis(
+                new AlatTulisKantor("K001", "Pulpen Kantor", 4000, "Administrasi")
+            );
 
-        toko.tambahAlatTulis(
-            new AlatTulisGambar("G001", "Pensil Warna", 15000, "Mewarnai")
-        );
+            toko.tambahAlatTulis(
+                new AlatTulisKantor("K002", "Map Folder", 7000, "Arsip")
+            );
 
-        toko.tambahAnggota(new Anggota("A001", "Andi"));
-        toko.tambahAnggota(new Anggota("A002", "Siti"));
-        toko.tambahAnggota(new Anggota("A003", "Budi"));
+            toko.tambahAlatTulis(
+                new AlatTulisGambar("G001", "Pensil Warna", 15000, "Mewarnai")
+            );
+
+            toko.tambahAnggota(new Anggota("A001", "Andi"));
+            toko.tambahAnggota(new Anggota("A002", "Siti"));
+            toko.tambahAnggota(new Anggota("A003", "Budi"));
+
+            toko.simpanDataKeFile();
+        }
 
         int pilihan = -1;
 
@@ -52,6 +58,9 @@ public class SistemManajemenAlatTulis {
             System.out.println("5. Kelola data anggota");
             System.out.println("6. Proses transaksi peminjaman");
             System.out.println("7. Informasi ruang penyimpanan");
+            System.out.println("8. Simpan data ke file");
+            System.out.println("9. Muat data dari file");
+            System.out.println("10. Tampilkan riwayat transaksi");
             System.out.println("0. Keluar");
             System.out.print("Pilih menu: ");
 
@@ -97,7 +106,20 @@ public class SistemManajemenAlatTulis {
                     toko.tampilkanRuangPenyimpanan();
                     break;
 
+                case 8:
+                    toko.simpanDataKeFile();
+                    break;
+
+                case 9:
+                    toko.muatDataDariFile();
+                    break;
+
+                case 10:
+                    toko.bacaLogTransaksi();
+                    break;
+
                 case 0:
+                    toko.simpanDataKeFile();
                     System.out.println("Program selesai.");
                     break;
 
